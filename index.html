@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shivam Raj — Graphic Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111;
+      --border: #222;
+      --text: #f0ece4;
+      --muted: #888;
+      --accent1: #ff6b35;
+      --accent2: #e91e8c;
+      --accent3: #00c9a7;
+      --accent4: #ffd166;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent1); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-text {
+      position: absolute;
+      top: 50%;
+      left: -2%;
+      transform: translateY(-50%);
+      font-family: var(--font-display);
+      font-size: clamp(12rem, 25vw, 22rem);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent1);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-title .line2 { color: var(--accent1); }
+
+    .hero-sub {
+      max-width: 500px;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .btn {
+      padding: 0.85rem 2rem;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--accent1);
+      color: #000;
+      border: none;
+      font-weight: 600;
+    }
+    .btn-primary:hover { background: #ff8552; transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--text); transform: translateY(-2px); }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      right: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s 1.5s forwards;
+    }
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--muted);
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 7rem 3rem; }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1;
+      margin-bottom: 3rem;
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-left .section-title { margin-bottom: 0; }
+    .about-left .accent-bar {
+      width: 60px;
+      height: 4px;
+      background: var(--accent1);
+      margin-top: 1.5rem;
+    }
+
+    .about-right p {
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2rem;
+    }
+    .tag {
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .tag:hover { border-color: var(--accent1); color: var(--accent1); }
+
+    /* ─── PROJECTS ─── */
+    #projects { border-top: 1px solid var(--border); }
+
+    .projects-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+    }
+
+    .project-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 4rem;
+      transition: border-color 0.3s;
+    }
+    .project-card:hover { border-color: #444; }
+
+    .project-header {
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .project-meta {}
+    .project-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .project-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 3rem);
+      letter-spacing: 0.04em;
+    }
+    .project-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      max-width: 500px;
+    }
+
+    .project-toggle {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s;
+      font-size: 1.4rem;
+      color: var(--muted);
+    }
+    .project-card.open .project-toggle {
+      border-color: var(--accent1);
+      color: var(--accent1);
+      transform: rotate(45deg);
+    }
+
+    .project-gallery {
+      display: none;
+      padding: 0 2rem 2rem;
+    }
+    .project-card.open .project-gallery { display: block; }
+
+    /* Masonry-ish grid */
+    .gallery-grid {
+      column-count: 3;
+      column-gap: 1rem;
+    }
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      cursor: zoom-in;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+    .gallery-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.03); }
+
+    /* ─── SOCIAL DESIGNS SECTION ─── */
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .social-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      aspect-ratio: 9/16;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .social-card img { width: 100%; height: 100%; object-fit: cover; }
+    .social-card-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      padding: 1.5rem 1rem 0.8rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── LIGHTBOX ─── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 2px;
+    }
+    .lb-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .lb-close:hover { border-color: var(--accent1); color: var(--accent1); }
+    .lb-nav {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .lb-btn {
+      padding: 0.6rem 1.4rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.85rem;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .lb-btn:hover { border-color: var(--text); }
+    .lb-counter {
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      padding: 0.6rem 1rem;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 8rem 3rem;
+    }
+
+    #contact .section-title { margin-bottom: 1rem; }
+    #contact .section-title span { color: var(--accent1); }
+
+    .contact-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-bottom: 4rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 1rem 1.8rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      transition: all 0.25s;
+    }
+    .contact-link:hover {
+      transform: translateY(-3px);
+    }
+    .contact-link.insta:hover { border-color: #e91e8c; color: #e91e8c; }
+    .contact-link.linkedin:hover { border-color: #0077b5; color: #0077b5; }
+    .contact-link.email:hover { border-color: var(--accent1); color: var(--accent1); }
+    .contact-link.phone:hover { border-color: var(--accent3); color: var(--accent3); }
+
+    .contact-link svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 0 1.5rem 4rem; }
+      section { padding: 4rem 1.5rem; }
+      #about { grid-template-columns: 1fr; gap: 2rem; }
+      .projects-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .project-header { padding: 1.5rem; }
+      .project-gallery { padding: 0 1rem 1.5rem; }
+      .gallery-grid { column-count: 2; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .contact-links { flex-direction: column; align-items: center; }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { column-count: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">SHIVAM<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg-text">DESIGN</div>
+    <p class="hero-eyebrow">Graphic Designer & Visual Artist</p>
+    <h1 class="hero-title">
+      SHIVAM<br>
+      <span class="line2">RAJ.</span>
+    </h1>
+    <p class="hero-sub">
+      Creating bold visual narratives — from comics and illustration to event campaigns and brand identity.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Work ↓</a>
+      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+    </div>
+    <div class="hero-scroll-hint">
+      <span class="scroll-line"></span>
+      Scroll to explore
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-left">
+      <p class="section-label">Who I Am</p>
+      <h2 class="section-title">Design is<br>storytelling.</h2>
+      <div class="accent-bar"></div>
+    </div>
+    <div class="about-right">
+      <p>
+        I'm Shivam Raj — a graphic designer and illustrator based in Manipal, India.
+        I craft visuals that communicate boldly: from sprawling comic series to
+        tight event campaigns and social media graphics.
+      </p>
+      <p>
+        My work lives at the intersection of narrative, colour, and concept.
+        Whether I'm building out a full illustration story or designing for brands
+        and student organisations, I bring the same energy — make it memorable.
+      </p>
+      <div class="about-tags">
+        <span class="tag">Graphic Design</span>
+        <span class="tag">Illustration</span>
+        <span class="tag">Comics</span>
+        <span class="tag">Brand Identity</span>
+        <span class="tag">Campaign Design</span>
+        <span class="tag">Social Media</span>
+        <span class="tag">Event Visuals</span>
+        <span class="tag">Content Strategy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="projects-header">
+      <div>
+        <p class="section-label">Selected Work</p>
+        <h2 class="section-title">Projects.</h2>
+      </div>
+    </div>
+
+    <!-- Comics -->
+    <div class="project-card" id="card-comics">
+      <div class="project-header" onclick="toggleCard('comics')">
+        <div class="project-meta">
+          <p class="project-tag">Comics · Illustration · Storytelling</p>
+          <h3 class="project-title">Comics & Illustration</h3>
+          <p class="project-desc">An original multi-page comic series — full visual storytelling from concept to frame.</p>
+        </div>
+        <div class="project-toggle">+</div>
+      </div>
+      <div class="project-gallery">
+        <div class="gallery-grid" id="gallery-comics"></div>
+      </div>
+    </div>
+
+    <!-- Navratri -->
+    <div class="project-card" id="card-navratri">
+      <div class="project-header" onclick="toggleCard('navratri')">
+        <div class="project-meta">
+          <p class="project-tag">Event Design · Campaign · Visual Identity</p>
+          <h3 class="project-title" style="color: #e91e8c;">Navratri 2025</h3>
+          <p class="project-desc">Full visual campaign design for Navratri 2025 — posters, posts, and event collateral.</p>
+        </div>
+        <div class="project-toggle">+</div>
+      </div>
+      <div class="project-gallery">
+        <div class="gallery-grid" id="gallery-navratri"></div>
+      </div>
+    </div>
+
+    <!-- Social / Context designs -->
+    <div class="project-card" id="card-social">
+      <div class="project-header" onclick="toggleCard('social')">
+        <div class="project-meta">
+          <p class="project-tag">Social Media · Branding · Recruitment</p>
+          <h3 class="project-title" style="color: #00c9a7;">Social Media & Club Designs</h3>
+          <p class="project-desc">Recruitment posters and event graphics for MIT Manipal's Student Council and club organisations, including the SC Web Dev Team and ADA Dramatics.</p>
+        </div>
+        <div class="project-toggle">+</div>
+      </div>
+      <div class="project-gallery">
+        <div id="gallery-social">
+          <!-- These two designs were shown in the chat but not available as separate files.
+               Replace the src attributes below with the actual image paths if you have them. -->
+          <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem;">
+            Featured designs: SC Dev Team recruitment poster (MIT Manipal Student Council) &amp; ADA Dramatics — "The Next Scene Is Yours" campaign.
+            <br><br>
+            To display these images on your live site, add <code style="color: var(--accent1);">Web_Dev_Team.png</code> and <code style="color: var(--accent1);">ADA_RECRUITMENT.png</code> into the <code style="color: var(--accent1);">public/assets/</code> folder.
+          </p>
+          <div class="social-grid">
+            <div class="social-card" style="background: #0a1a3a;">
+              <div style="text-align:center; padding: 2rem; color: #4477aa;">
+                <div style="font-size:3rem; margin-bottom:1rem;">🖥️</div>
+                <div style="font-family: var(--font-display); font-size: 1.4rem; letter-spacing: 0.08em;">SC DEV TEAM</div>
+                <div style="font-size:0.75rem; color: #667; margin-top: 0.5rem;">MIT Manipal Recruitment Poster</div>
+              </div>
+              <div class="social-card-label">SC Dev Team — MIT Manipal</div>
+            </div>
+            <div class="social-card" style="background: #1a0d00;">
+              <div style="text-align:center; padding: 2rem; color: #c8a96e;">
+                <div style="font-size:3rem; margin-bottom:1rem;">🎭</div>
+                <div style="font-family: var(--font-display); font-size: 1.4rem; letter-spacing: 0.08em;">ADA DRAMATICS</div>
+                <div style="font-size:0.75rem; color: #667; margin-top: 0.5rem;">The Next Scene Is Yours</div>
+              </div>
+              <div class="social-card-label">ADA Dramatics — Recruitment</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label" style="text-align:center;">Let's Work Together</p>
+    <h2 class="section-title">Say <span>Hello.</span></h2>
+    <p class="contact-sub">
+      Open to freelance projects, collaborations, and design conversations.
+      Reach out on any platform below.
+    </p>
+
+    <div class="contact-links">
+      <a class="contact-link insta" href="https://www.instagram.com/shiiivamraj/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+        </svg>
+        @shiiivamraj
+      </a>
+      <a class="contact-link linkedin" href="https://www.linkedin.com/in/shivamraj97" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+          <circle cx="4" cy="4" r="2"/>
+        </svg>
+        Shivam Raj
+      </a>
+      <a class="contact-link email" href="mailto:sraj77196@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M2 7l10 7 10-7"/>
+        </svg>
+        sraj77196@gmail.com
+      </a>
+      <a class="contact-link phone" href="tel:+917759993409">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5 19.79 19.79 0 01.12 2.82 2 2 0 012.1 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.46-.46a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+        +91 77599 93409
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2025 Shivam Raj. All rights reserved.</span>
+    <span>Graphic Designer · Manipal, India</span>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <button class="lb-close" onclick="closeLightbox()">×</button>
+    <img id="lb-img" src="" alt="Design work" />
+    <div class="lb-nav">
+      <button class="lb-btn" onclick="lbNav(-1)">← Prev</button>
+      <span class="lb-counter" id="lb-counter">1 / 1</span>
+      <button class="lb-btn" onclick="lbNav(1)">Next →</button>
+    </div>
+  </div>
+
+  <script>
+    // ── Image data (loaded from separate JS files or inline) ──
+    // We build the gallery from the assets folder paths
+    const PROJECTS = {
+      comics: {
+        count: 36,
+        path: 'assets/comics/comics_page',
+        ext: '.jpg'
+      },
+      navratri: {
+        count: 12,
+        path: 'assets/navratri/Navratri_2025_page',
+        ext: '.jpg'
+      }
+    };
+
+    function buildGallery(id) {
+      const proj = PROJECTS[id];
+      if (!proj) return;
+      const grid = document.getElementById('gallery-' + id);
+      if (grid.children.length > 0) return; // already built
+
+      let imgs = [];
+      for (let i = 1; i <= proj.count; i++) {
+        imgs.push(proj.path + i + proj.ext);
+      }
+
+      imgs.forEach((src, idx) => {
+        const div = document.createElement('div');
+        div.className = 'gallery-item';
+        div.onclick = () => openLightbox(id, idx);
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Design work ' + (idx + 1);
+        img.loading = 'lazy';
+        div.appendChild(img);
+        grid.appendChild(div);
+      });
+    }
+
+    // ── Card toggle ──
+    function toggleCard(id) {
+      const card = document.getElementById('card-' + id);
+      const isOpen = card.classList.contains('open');
+      card.classList.toggle('open');
+      if (!isOpen) buildGallery(id);
+    }
+
+    // ── Lightbox ──
+    let lbGallery = [];
+    let lbIdx = 0;
+
+    function openLightbox(galleryId, idx) {
+      const proj = PROJECTS[galleryId];
+      lbGallery = [];
+      for (let i = 1; i <= proj.count; i++) {
+        lbGallery.push(proj.path + i + proj.ext);
+      }
+      lbIdx = idx;
+      updateLightbox();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function updateLightbox() {
+      document.getElementById('lb-img').src = lbGallery[lbIdx];
+      document.getElementById('lb-counter').textContent = (lbIdx + 1) + ' / ' + lbGallery.length;
+    }
+
+    function lbNav(dir) {
+      lbIdx = (lbIdx + dir + lbGallery.length) % lbGallery.length;
+      updateLightbox();
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lbNav(-1);
+      if (e.key === 'ArrowRight') lbNav(1);
+    });
+
+    // ── Scroll reveal ──
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.project-card, #about, #contact .contact-link').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
